@@ -1,6 +1,8 @@
-import express, { Request, Response } from 'express';
+import { Request, Response } from 'express';
+import connectDB from './config/db';
+import app from './app';
 
-const app = express();
+connectDB();
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World');
