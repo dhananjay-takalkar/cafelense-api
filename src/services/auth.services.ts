@@ -4,14 +4,27 @@ import { createUser, getUserByEmail } from "../repository/user.repository";
 import { generateToken } from "../utils/token";
 import bcrypt from "bcrypt";
 import { CommonResponse } from "../types/common.type";
-
+import { statusCodes } from "../utils/constants";
 const register = async (body: any): Promise<CommonResponse> => {
   try {
-    const { name, address, email, mobile_number, logo_url, password, role } =
-      body;
+    const {
+      name,
+      city,
+      state,
+      country,
+      pincode,
+      email,
+      mobile_number,
+      logo_url,
+      password,
+      role,
+    } = body;
     if (
       !name ||
-      !address ||
+      !city ||
+      !state ||
+      !country ||
+      !pincode ||
       !email ||
       !mobile_number ||
       !logo_url ||
@@ -19,21 +32,24 @@ const register = async (body: any): Promise<CommonResponse> => {
       !role
     ) {
       return {
-        status: 400,
+        status: statusCodes.BAD_REQUEST,
         message: messages.INVALID_PARAMETERS,
         success: false,
       };
     }
     const cafe: any = await addCafe({
       name,
-      address,
+      city,
+      state,
+      country,
+      pincode,
       email,
       mobile_number,
       logo_url,
     });
     if (!cafe.success) {
       return {
-        status: 400,
+        status: statusCodes.BAD_REQUEST,
         message: messages.CAFE_CREATION_FAILED,
         success: false,
       };
@@ -42,7 +58,7 @@ const register = async (body: any): Promise<CommonResponse> => {
     const { data } = await getUserByEmail(email);
     if (data) {
       return {
-        status: 400,
+        status: statusCodes.BAD_REQUEST,
         message: messages.USER_ALREADY_EXISTS,
         success: false,
       };
@@ -60,13 +76,17 @@ const register = async (body: any): Promise<CommonResponse> => {
       role: user.role,
     });
     return {
-      status: 201,
+      status: statusCodes.CREATED,
       message: messages.USER_CREATED_SUCCESSFULLY,
       data: { user, token },
       success: true,
     };
   } catch (error: any) {
-    return { status: 500, message: error.message, success: false };
+    return {
+      status: statusCodes.INTERNAL_SERVER_ERROR,
+      message: error.message,
+      success: false,
+    };
   }
 };
 
@@ -75,7 +95,7 @@ const createNewUser = async (body: any): Promise<CommonResponse> => {
     const { email, password, role, cafe_id } = body;
     if (!email || !password || !role || !cafe_id) {
       return {
-        status: 400,
+        status: statusCodes.BAD_REQUEST,
         message: messages.INVALID_PARAMETERS,
         success: false,
       };
@@ -83,7 +103,7 @@ const createNewUser = async (body: any): Promise<CommonResponse> => {
     const { data } = await getUserByEmail(email);
     if (data) {
       return {
-        status: 400,
+        status: statusCodes.BAD_REQUEST,
         message: messages.USER_ALREADY_EXISTS,
         success: false,
       };
@@ -95,33 +115,42 @@ const createNewUser = async (body: any): Promise<CommonResponse> => {
       cafe_id,
     });
     return {
-      status: 201,
+      status: statusCodes.CREATED,
       message: messages.USER_CREATED_SUCCESSFULLY,
       data: user,
+      success: true,
     };
   } catch (error: any) {
-    return { status: 500, message: error.message, success: false };
+    return {
+      status: statusCodes.INTERNAL_SERVER_ERROR,
+      message: error.message,
+      success: false,
+    };
   }
 };
 
-const login = async (body: any) => {
+const login = async (body: any): Promise<CommonResponse> => {
   try {
     const { email, password } = body;
     if (!email || !password) {
       return {
-        status: 400,
+        status: statusCodes.BAD_REQUEST,
         message: messages.INVALID_PARAMETERS,
         success: false,
       };
     }
     const { data } = await getUserByEmail(email);
     if (!data) {
-      return { status: 400, message: messages.USER_NOT_FOUND, success: false };
+      return {
+        status: statusCodes.BAD_REQUEST,
+        message: messages.USER_NOT_FOUND,
+        success: false,
+      };
     }
     const isPasswordValid = await bcrypt.compare(password, data.password);
     if (!isPasswordValid) {
       return {
-        status: 400,
+        status: statusCodes.BAD_REQUEST,
         message: messages.INVALID_CREDENTIALS,
         success: false,
       };
@@ -132,13 +161,17 @@ const login = async (body: any) => {
       role: data.role,
     });
     return {
-      status: 200,
+      status: statusCodes.SUCCESS,
       message: messages.LOGIN_SUCCESS,
       data: { token, user: data },
       success: true,
     };
   } catch (error: any) {
-    return { status: 500, message: error.message, success: false };
+    return {
+      status: statusCodes.INTERNAL_SERVER_ERROR,
+      message: error.message,
+      success: false,
+    };
   }
 };
 export { register, createNewUser, login };

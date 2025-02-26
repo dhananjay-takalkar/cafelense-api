@@ -1,3 +1,4 @@
-import authRoutes from './auth.routes';
+import authRoutes from "./auth.routes";
+import dishRoutes from "./dish.routes";
 
-export { authRoutes };
+export { authRoutes, dishRoutes };

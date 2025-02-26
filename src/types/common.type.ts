@@ -1,6 +1,6 @@
 interface CommonResponse {
   status: number;
-  success?: boolean;
+  success: boolean;
   data?: any;
   message: string;
 }
