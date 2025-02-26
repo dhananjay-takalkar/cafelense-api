@@ -1,20 +1,32 @@
-import { createCafe, getCafeByMobileNumber } from '../repository/cafe.repository';
-import { getCounter } from '../repository/counter.repository';
-import { COUNTER_NAME } from '../utils/constants';
+import {
+  createCafe,
+  getCafeByMobileNumber,
+} from "../repository/cafe.repository";
+import { getCounter } from "../repository/counter.repository";
+import { COUNTER_NAME } from "../utils/constants";
 import messages from "../utils/messages";
+import { CommonResponse } from "../types/common.type";
 
-const addCafe = async (body: any) => {
+const addCafe = async (body: any): Promise<CommonResponse> => {
   try {
     const { name, address, email, mobile_number, logo_url } = body;
     if (!name || !address || !email || !mobile_number || !logo_url) {
-      return { status: 400, message: messages.INVALID_PARAMETERS, success: false };
+      return {
+        status: 400,
+        message: messages.INVALID_PARAMETERS,
+        success: false,
+      };
     }
     const cafe = await getCafeByMobileNumber(mobile_number);
     if (cafe.data) {
-      return { status: 400, message: messages.CAFE_ALREADY_EXISTS, success: false };
+      return {
+        status: 400,
+        message: messages.CAFE_ALREADY_EXISTS,
+        success: false,
+      };
     }
-    const cafeId:any = await getCounter(COUNTER_NAME.CAFE, null);
-    if(!cafeId.success){
+    const cafeId: any = await getCounter(COUNTER_NAME.CAFE, null);
+    if (!cafeId.success) {
       return { status: 500, message: cafeId.message, success: false };
     }
     const newCafe = await createCafe({

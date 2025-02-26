@@ -1,18 +1,14 @@
-
-
-import { Request, Response } from "express";
+import { Request } from "express";
 import { login } from "../services/auth.services";
 import { register } from "../services/auth.services";
-import { returnResponse } from "../utils/response";
+import { CommonResponse } from "../types/common.type";
 
-const registerCafe = async (req: Request, res: Response) => {
-  const { status, message, data } = await register(req.body);
-  return returnResponse({status, message, data}, res);
-}
+const registerCafe = async (req: Request): Promise<CommonResponse> => {
+  return await register(req.body);
+};
 
-const loginUser = async (req: Request, res: Response) => {
-  const { status, message, data } = await login(req.body);
-  return returnResponse({status, message, data}, res);
-}
+const loginUser = async (req: Request): Promise<CommonResponse> => {
+  return await login(req.body);
+};
 
 export { registerCafe, loginUser };
