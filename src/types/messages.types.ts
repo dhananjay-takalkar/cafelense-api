@@ -5,6 +5,7 @@ export type Messages = {
   USER_CREATION_FAILED: string;
   INVALID_CREDENTIALS: string;
   INVALID_PARAMETERS: string;
+  PASSWORD_DO_NOT_MATCH: string;
   CAFE_CREATED_SUCCESSFULLY: string;
   CAFE_FOUND: string;
   CAFE_NOT_FOUND: string;

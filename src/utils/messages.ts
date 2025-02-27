@@ -7,6 +7,7 @@ const messages: Messages = {
   USER_CREATION_FAILED: "User creation failed",
   INVALID_CREDENTIALS: "Invalid credentials",
   INVALID_PARAMETERS: "Invalid parameters",
+  PASSWORD_DO_NOT_MATCH: "Password do not match",
   CAFE_CREATED_SUCCESSFULLY: "Cafe created successfully",
   CAFE_FOUND: "Cafe found",
   CAFE_NOT_FOUND: "Cafe not found",

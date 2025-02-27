@@ -1,60 +1,19 @@
 import messages from "../utils/messages";
-import { addCafe } from "./cafe.services";
 import { createUser, getUserByEmail } from "../repository/user.repository";
 import { generateToken } from "../utils/token";
 import bcrypt from "bcrypt";
 import { CommonResponse } from "../types/common.type";
 import { statusCodes } from "../utils/constants";
-const register = async (body: any): Promise<CommonResponse> => {
+const registerService = async (body: any): Promise<CommonResponse> => {
   try {
-    const {
-      name,
-      city,
-      state,
-      country,
-      pincode,
-      email,
-      mobile_number,
-      logo_url,
-      password,
-      role,
-    } = body;
-    if (
-      !name ||
-      !city ||
-      !state ||
-      !country ||
-      !pincode ||
-      !email ||
-      !mobile_number ||
-      !logo_url ||
-      !password ||
-      !role
-    ) {
+    const { name, email, password, role = "admin" } = body;
+    if (!name || !email || !password) {
       return {
         status: statusCodes.BAD_REQUEST,
         message: messages.INVALID_PARAMETERS,
         success: false,
       };
     }
-    const cafe: any = await addCafe({
-      name,
-      city,
-      state,
-      country,
-      pincode,
-      email,
-      mobile_number,
-      logo_url,
-    });
-    if (!cafe.success) {
-      return {
-        status: statusCodes.BAD_REQUEST,
-        message: messages.CAFE_CREATION_FAILED,
-        success: false,
-      };
-    }
-    const cafeId = cafe.data.cafe_id;
     const { data } = await getUserByEmail(email);
     if (data) {
       return {
@@ -63,22 +22,20 @@ const register = async (body: any): Promise<CommonResponse> => {
         success: false,
       };
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
     const { data: user } = await createUser({
+      name,
       email,
-      password: hashedPassword,
+      password,
       role,
-      cafe_id: cafeId,
     });
     const token = generateToken({
       userId: user._id,
-      cafe_id: cafeId,
       role: user.role,
     });
     return {
       status: statusCodes.CREATED,
       message: messages.USER_CREATED_SUCCESSFULLY,
-      data: { user, token },
+      data: { ...user, token },
       success: true,
     };
   } catch (error: any) {
@@ -129,7 +86,7 @@ const createNewUser = async (body: any): Promise<CommonResponse> => {
   }
 };
 
-const login = async (body: any): Promise<CommonResponse> => {
+const loginService = async (body: any): Promise<CommonResponse> => {
   try {
     const { email, password } = body;
     if (!email || !password) {
@@ -159,11 +116,12 @@ const login = async (body: any): Promise<CommonResponse> => {
       userId: data._id,
       cafe_id: data.cafe_id,
       role: data.role,
+      email: data.email,
     });
     return {
       status: statusCodes.SUCCESS,
       message: messages.LOGIN_SUCCESS,
-      data: { token, user: data },
+      data: { token, ...data, password: undefined },
       success: true,
     };
   } catch (error: any) {
@@ -174,4 +132,4 @@ const login = async (body: any): Promise<CommonResponse> => {
     };
   }
 };
-export { register, createNewUser, login };
+export { registerService, createNewUser, loginService };

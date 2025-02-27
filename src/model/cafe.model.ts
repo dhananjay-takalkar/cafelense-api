@@ -3,10 +3,11 @@ import { ICafe } from "../types/cafe.type";
 
 const cafeSchema = new Schema(
   {
-    cafe_id: {
+    id: {
       type: Number,
       required: true,
       unique: true,
+      index: true,
     },
     name: {
       type: String,

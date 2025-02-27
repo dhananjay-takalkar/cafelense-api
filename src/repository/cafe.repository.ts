@@ -4,19 +4,20 @@ import { ICafe } from "../types/cafe.type";
 
 const createCafe = async (cafeData: ICafe) => {
   try {
+    console.log(cafeData);
     const cafe = await Cafe.create(cafeData);
     return { data: cafe, success: true };
   } catch (error: any) {
-    return { success: false, message: error.message };
+    throw { success: false, message: error.message };
   }
 };
 
 const getCafeById = async (cafeId: any) => {
   try {
-    const cafe = await Cafe.findById(cafeId);
+    const cafe = await Cafe.findOne({ id: cafeId });
     return { data: cafe, success: true };
   } catch (error: any) {
-    return { success: false, message: error.message };
+    throw { success: false, message: error.message };
   }
 };
 
@@ -25,7 +26,7 @@ const getCafeByMobileNumber = async (mobileNumber: any) => {
     const cafe = await Cafe.findOne({ mobile_number: mobileNumber });
     return { data: cafe, success: true };
   } catch (error: any) {
-    return { success: false, message: error.message };
+    throw { success: false, message: error.message };
   }
 };
 
@@ -77,7 +78,7 @@ const getCafeMenu = async (cafeId: any) => {
     ]);
     return { data: cafe, success: true };
   } catch (error: any) {
-    return { success: false, message: error.message };
+    throw { success: false, message: error.message };
   }
 };
 export { createCafe, getCafeById, getCafeByMobileNumber, getCafeMenu };

@@ -1,5 +1,5 @@
 export interface ICafe {
-  cafe_id: number;
+  id: number;
   name: string;
   city: string;
   state: string;

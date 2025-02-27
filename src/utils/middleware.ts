@@ -3,6 +3,7 @@ import { verifyToken } from "./token";
 import { statusCodes } from "./constants";
 import { isAuthorized } from "./authorization";
 import multer from "multer";
+
 const validateToken = (req: Request, res: any, next: NextFunction) => {
   const token = req.headers.authorization;
   if (!token) {
@@ -28,8 +29,7 @@ const validateToken = (req: Request, res: any, next: NextFunction) => {
       success: false,
     });
   }
-
-  // (req as any).user = decoded;
+  (req as any).user = decoded;
   next();
 };
 
