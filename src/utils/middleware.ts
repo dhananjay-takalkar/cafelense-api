@@ -3,7 +3,7 @@ import { verifyToken } from "./token";
 import { statusCodes } from "./constants";
 import { isAuthorized } from "./authorization";
 import multer from "multer";
-const validateToken = (req: Request, res: Response, next: NextFunction) => {
+const validateToken = (req: Request, res: any, next: NextFunction) => {
   const token = req.headers.authorization;
   if (!token) {
     return res.status(statusCodes.UNAUTHORIZED).json({
