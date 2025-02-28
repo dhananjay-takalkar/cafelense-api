@@ -1,13 +1,16 @@
-import { Request, Response } from 'express';
-import connectDB from './config/db';
-import app from './app';
+import { Request, Response } from "express";
+import connectDB from "./config/db";
+import app from "./app";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 connectDB();
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World');
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello World");
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
 });

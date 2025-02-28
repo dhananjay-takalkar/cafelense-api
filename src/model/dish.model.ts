@@ -1,49 +1,52 @@
-import mongoose, { Schema, Document } from 'mongoose';
-import { IDish } from '../types/dish.type';
+import mongoose, { Schema, Document } from "mongoose";
+import { IDish } from "../types/dish.type";
 
-
-const dishSchema = new Schema({
+const dishSchema = new Schema(
+  {
     dish_id: {
-        type: Number,
-        required: true,
-        unique: true,
-        ref: 'Cafe'
+      type: Number,
+      required: true,
+      unique: true,
     },
     cafe_id: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
+      index: true,
+      ref: "Cafe",
     },
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     description: {
-        type: String,
-        required: true
+      type: String,
+      //   required: true,
     },
     price: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     image_url: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     is_active: {
-        type: Boolean,
-        default: true
+      type: Boolean,
+      default: true,
     },
-    is_delete:{
-        type: Boolean,
-        default: false
-    }
-}, {
+    is_delete: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
     timestamps: {
-        createdAt: 'created_at',
-        updatedAt: 'updated_at'
-    }
-});
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    },
+  }
+);
 
-const Dish = mongoose.model<IDish & Document>('Dish', dishSchema);
+const Dish = mongoose.model<IDish & Document>("Dish", dishSchema);
 
 export default Dish;
