@@ -11,16 +11,17 @@ import { uploadImage } from "../utils/utils";
 
 const createDishService = async (
   dishData: any,
+  file: any,
   userData: any
 ): Promise<CommonResponse> => {
   try {
-    const { name, description, price, image_url } = dishData;
+    const { name, description, price } = dishData;
     const { role } = userData;
     let { cafe_id } = dishData;
     if (role !== "superadmin") {
       cafe_id = userData.cafe_id;
     }
-    if (!name || !price || !image_url || !cafe_id) {
+    if (!name || !price || !cafe_id || !file) {
       return {
         success: false,
         message: messages.INVALID_PARAMETERS,
@@ -35,6 +36,15 @@ const createDishService = async (
         status: statusCodes.BAD_REQUEST,
       };
     }
+    const imageUrl = await uploadImage(file);
+    if (!imageUrl.success) {
+      return {
+        success: false,
+        message: imageUrl.message,
+        status: statusCodes.BAD_REQUEST,
+      };
+    }
+    dishData.image_url = imageUrl.data;
     const dish = await createDish(dishData);
     return {
       success: true,

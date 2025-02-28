@@ -13,6 +13,7 @@ const router = express.Router();
 router.post(
   "/create-dish",
   validateToken,
+  upload.single("image"),
   async (req: Request, res: Response) => {
     return returnResponse(await createDish(req), res);
   }

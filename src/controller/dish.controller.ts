@@ -8,7 +8,7 @@ import {
 import { Request } from "express";
 import { RequestWithUser } from "../types/request.type";
 const createDish = async (req: RequestWithUser): Promise<CommonResponse> => {
-  return await createDishService(req.body, req.user);
+  return await createDishService(req.body, req.file, req.user);
 };
 
 const getDishById = async (req: Request): Promise<CommonResponse> => {
