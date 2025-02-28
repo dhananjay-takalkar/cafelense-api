@@ -5,12 +5,12 @@ import { validateToken } from "../utils/middleware";
 
 const router = express.Router();
 
-router.post("/create", validateToken, async (req: Request, res: Response) => {
-  return returnResponse(await addCafe(req), res);
-});
-
 router.get("/", validateToken, async (req: Request, res: Response) => {
   return returnResponse(await getCafe(req), res);
+});
+
+router.post("/create", validateToken, async (req: Request, res: Response) => {
+  return returnResponse(await addCafe(req), res);
 });
 
 export default router;
