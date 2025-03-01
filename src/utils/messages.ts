@@ -25,6 +25,15 @@ const messages: Messages = {
   IMAGE_UPLOADED_SUCCESSFULLY: "Image uploaded successfully",
   IMAGE_UPLOAD_FAILED: "Image upload failed",
   INVALID_FILE_FORMAT: "Invalid file format",
+  CATEGORY_CREATED_SUCCESSFULLY: "Category created successfully",
+  CATEGORY_CREATION_FAILED: "Category creation failed",
+  CATEGORY_NOT_FOUND: "Category not found",
+  CATEGORY_UPDATE_SUCCESSFULLY: "Category updated successfully",
+  CATEGORY_UPDATE_FAILED: "Category update failed",
+  CATEGORY_DELETE_SUCCESSFULLY: "Category deleted successfully",
+  CATEGORY_FOUND: "Category found",
+  FILE_UPLOADED_SUCCESSFULLY: "File uploaded successfully",
+  FILE_UPLOAD_FAILED: "File upload failed",
 };
 
 export default messages;

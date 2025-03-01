@@ -3,7 +3,7 @@ import {
   getCafeById,
   getCafeByMobileNumber,
 } from "../repository/cafe.repository";
-import { getCounter } from "../repository/counter.repository";
+import { getNextSequence } from "../repository/counter.repository";
 import { COUNTER_NAME, statusCodes } from "../utils/constants";
 import messages from "../utils/messages";
 import { CommonResponse } from "../types/common.type";
@@ -42,7 +42,7 @@ const addCafeService = async (
         success: false,
       };
     }
-    const nextCafeId: any = await getCounter(COUNTER_NAME.CAFE, null);
+    const nextCafeId: any = await getNextSequence(COUNTER_NAME.CAFE, null);
     if (!nextCafeId.success) {
       return {
         status: statusCodes.INTERNAL_SERVER_ERROR,
@@ -59,7 +59,7 @@ const addCafeService = async (
       email,
       mobile_number,
       logo_url,
-      id: nextCafeId.data.count,
+      id: nextCafeId.data,
     });
     console.log(userInfo);
     await updateUserById(userInfo.userId, {

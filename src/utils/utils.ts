@@ -11,17 +11,18 @@ const uploadImage = async (imageFile: any) => {
     };
   }
 
-  const formData: any = new FormData();
-  formData.append("file", imageFile.buffer, imageFile.originalname);
-  formData.append("api_key", process.env.IMAGE_HIPPO_API_KEY || "");
+  const formData: FormData = new FormData();
+  formData.append("file", imageFile.buffer);
+  console.log(process.env.IMAGE_HIPPO_API_KEY);
+  formData.append("api_key", "4ca800a9443895cc54c2037153107988");
 
   const response = await axios.post(
     "https://api.imghippo.com/v1/upload",
     formData,
     {
       headers: {
-        ...formData.getHeaders(),
-        api_key: process.env.IMAGE_HIPPO_API_KEY,
+        "Content-Type": "multipart/form-data",
+        api_key: "4ca800a9443895cc54c2037153107988",
       },
     }
   );

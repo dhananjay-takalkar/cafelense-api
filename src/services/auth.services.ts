@@ -4,6 +4,7 @@ import { generateToken } from "../utils/token";
 import bcrypt from "bcrypt";
 import { CommonResponse } from "../types/common.type";
 import { statusCodes } from "../utils/constants";
+
 const registerService = async (body: any): Promise<CommonResponse> => {
   try {
     const { name, email, password, role = "admin" } = body;
@@ -22,10 +23,11 @@ const registerService = async (body: any): Promise<CommonResponse> => {
         success: false,
       };
     }
+    const hashedPassword = await bcrypt.hash(password, 10);
     const { data: user } = await createUser({
       name,
       email,
-      password,
+      password: hashedPassword,
       role,
     });
     const token = generateToken({

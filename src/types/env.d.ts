@@ -5,6 +5,7 @@ declare global {
       MONGO_URI: string;
       PORT: string;
       IMAGE_HIPPO_API_KEY: string;
+      IMAGE_HIPPO_API_URL: string;
     }
   }
 }
