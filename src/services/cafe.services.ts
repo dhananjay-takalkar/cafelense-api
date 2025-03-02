@@ -3,34 +3,43 @@ import {
   getCafeById,
   getCafeByMobileNumber,
 } from "../repository/cafe.repository";
-import { getCounter } from "../repository/counter.repository";
+import { getNextSequence } from "../repository/counter.repository";
 import { COUNTER_NAME, statusCodes } from "../utils/constants";
 import messages from "../utils/messages";
 import { CommonResponse } from "../types/common.type";
 import { updateUserById } from "../repository/user.repository";
-
+import { getUserById } from "../repository/user.repository";
+import { uploadImageToS3 } from "../utils/aws";
 const addCafeService = async (
   body: any,
+  file: any,
   userInfo: any
 ): Promise<CommonResponse> => {
   try {
-    const { name, city, state, country, pincode, mobile_number, logo_url } =
-      body;
+    const { name, city, state, country, pincode, mobile_number } = body;
     const { email } = userInfo;
 
     if (
       !name ||
-      !city ||
-      !state ||
+      // !city ||
+      // !state ||
       !country ||
       !pincode ||
       !email ||
-      !mobile_number ||
-      !logo_url
+      !mobile_number
     ) {
       return {
         status: statusCodes.BAD_REQUEST,
         message: messages.INVALID_PARAMETERS,
+        success: false,
+      };
+    }
+    //check if user already has a cafe
+    const userData = await getUserById(userInfo.userId);
+    if (!userData.success || (userData.data && userData.data.cafe_id)) {
+      return {
+        status: statusCodes.BAD_REQUEST,
+        message: messages.USER_ALREADY_HAS_CAFE,
         success: false,
       };
     }
@@ -42,13 +51,21 @@ const addCafeService = async (
         success: false,
       };
     }
-    const nextCafeId: any = await getCounter(COUNTER_NAME.CAFE, null);
+    const nextCafeId: any = await getNextSequence(COUNTER_NAME.CAFE, null);
     if (!nextCafeId.success) {
       return {
         status: statusCodes.INTERNAL_SERVER_ERROR,
         message: nextCafeId.message,
         success: false,
       };
+    }
+    let logoUrl;
+    if (file) {
+      logoUrl = await uploadImageToS3(
+        file,
+        "cafeLogo",
+        `/${nextCafeId.data.count}`
+      );
     }
     const newCafe = await createCafe({
       name,
@@ -58,8 +75,8 @@ const addCafeService = async (
       pincode,
       email,
       mobile_number,
-      logo_url,
-      id: nextCafeId.data.count,
+      logo_url: logoUrl?.data,
+      id: nextCafeId.data,
     });
     console.log(userInfo);
     await updateUserById(userInfo.userId, {

@@ -3,6 +3,7 @@ const authorization = {
   getdishbyid: ["admin", "superadmin"],
   getdishbycafeid: ["admin", "superadmin"],
   uploadimage: ["admin", "superadmin"],
+  createcategory: ["admin", "superadmin"],
 };
 
 const isAuthorized = (endpoint: keyof typeof authorization, role: string) =>

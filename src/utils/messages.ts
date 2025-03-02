@@ -13,6 +13,7 @@ const messages: Messages = {
   CAFE_NOT_FOUND: "Cafe not found",
   CAFE_CREATION_FAILED: "Cafe creation failed",
   CAFE_ALREADY_EXISTS: "Cafe already exists",
+  USER_ALREADY_HAS_CAFE: "User already has a cafe",
   LOGIN_SUCCESS: "Login successful",
   DISH_CREATED_SUCCESSFULLY: "Dish created successfully",
   DISH_CREATION_FAILED: "Dish creation failed",
@@ -25,6 +26,17 @@ const messages: Messages = {
   IMAGE_UPLOADED_SUCCESSFULLY: "Image uploaded successfully",
   IMAGE_UPLOAD_FAILED: "Image upload failed",
   INVALID_FILE_FORMAT: "Invalid file format",
+  CATEGORY_CREATED_SUCCESSFULLY: "Category created successfully",
+  CATEGORY_CREATION_FAILED: "Category creation failed",
+  CATEGORY_NOT_FOUND: "Category not found",
+  CATEGORY_UPDATE_SUCCESSFULLY: "Category updated successfully",
+  CATEGORY_UPDATE_FAILED: "Category update failed",
+  CATEGORY_DELETE_SUCCESSFULLY: "Category deleted successfully",
+  CATEGORY_FOUND: "Category found",
+  FILE_UPLOADED_SUCCESSFULLY: "File uploaded successfully",
+  FILE_UPLOAD_FAILED: "File upload failed",
+  CATEGORIES_FOUND: "Categories found",
+  CATEGORIES_NOT_FOUND: "Categories not found",
 };
 
 export default messages;
