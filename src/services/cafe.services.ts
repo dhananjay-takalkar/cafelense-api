@@ -18,7 +18,8 @@ const addCafeService = async (
   try {
     const { name, city, state, country, pincode, mobile_number } = body;
     const { email } = userInfo;
-
+    console.log(userInfo);
+    console.log(body);
     if (
       !name ||
       // !city ||
@@ -78,7 +79,6 @@ const addCafeService = async (
       logo_url: logoUrl?.data,
       id: nextCafeId.data,
     });
-    console.log(userInfo);
     await updateUserById(userInfo.userId, {
       cafe_id: nextCafeId.data.count,
     });
