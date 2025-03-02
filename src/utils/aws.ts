@@ -33,7 +33,9 @@ export const uploadImageToS3 = async (
     process.env.AWS_BUCKET_NAME = "playzoneapp";
     const params = {
       Bucket: process.env.AWS_BUCKET_NAME || "playzoneapp",
-      Key: `dishes/${cafe_id}_${name.trim().replace(/\s+/g, "_")}`,
+      Key: `dishes/${cafe_id}_${name
+        .trim()
+        .replace(/\s+/g, "_")}_${Date.now()}`,
       Body: file.buffer,
       ContentType: file.mimetype,
       ACL: "public-read" as ObjectCannedACL,
