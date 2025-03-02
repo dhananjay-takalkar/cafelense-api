@@ -11,6 +11,7 @@ export type Messages = {
   CAFE_NOT_FOUND: string;
   CAFE_CREATION_FAILED: string;
   CAFE_ALREADY_EXISTS: string;
+  USER_ALREADY_HAS_CAFE: string;
   LOGIN_SUCCESS: string;
   DISH_CREATED_SUCCESSFULLY: string;
   DISH_CREATION_FAILED: string;

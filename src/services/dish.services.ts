@@ -47,7 +47,7 @@ const createDishService = async (
         status: statusCodes.BAD_REQUEST,
       };
     }
-    const imageUrl = await uploadImageToS3(file, name, cafe_id);
+    const imageUrl = await uploadImageToS3(file, `${name}`, `dish/${cafe_id}`);
     console.log("imageUrl", imageUrl);
     if (!imageUrl.success) {
       return {

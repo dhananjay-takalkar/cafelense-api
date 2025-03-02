@@ -15,11 +15,11 @@ const cafeSchema = new Schema(
     },
     city: {
       type: String,
-      required: true,
+      // required: true,
     },
     state: {
       type: String,
-      required: true,
+      // required: true,
     },
     country: {
       type: String,
@@ -52,7 +52,7 @@ const cafeSchema = new Schema(
     },
     themeColor_id: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      // required: true,
       ref: "ThemeColor",
     },
   },
