@@ -26,7 +26,7 @@ const userSchema = new Schema(
       // required: true,
       ref: "Cafe",
     },
-    isActive: {
+    is_active: {
       type: Boolean,
       default: true,
     },
