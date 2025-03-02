@@ -6,7 +6,6 @@ const dishSchema = new Schema(
     dish_id: {
       type: Number,
       required: true,
-      unique: true,
     },
     cafe_id: {
       type: Number,
@@ -30,6 +29,10 @@ const dishSchema = new Schema(
       type: String,
       required: true,
     },
+    is_available: {
+      type: Boolean,
+      default: true,
+    },
     is_active: {
       type: Boolean,
       default: true,
@@ -46,6 +49,13 @@ const dishSchema = new Schema(
     },
   }
 );
+
+// Create unique index for dish_id + cafe_id
+dishSchema.index({ dish_id: 1, cafe_id: 1 }, { unique: true });
+
+dishSchema.index({ name: 1, cafe_id: 1 }, { unique: true });
+// Create index for is_available is_active is_delete
+dishSchema.index({ is_available: 1, is_active: 1, is_delete: 1 });
 
 const Dish = mongoose.model<IDish & Document>("Dish", dishSchema);
 

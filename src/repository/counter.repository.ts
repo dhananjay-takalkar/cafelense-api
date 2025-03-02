@@ -1,13 +1,13 @@
 import Counter from "../model/counter.mode";
 
-const getCounter = async (name: any, cafe_id: any) => {
+const getNextSequence = async (name: any, cafe_id: any) => {
   try {
     const counter = await Counter.findOneAndUpdate(
       { name, cafe_id },
       { $inc: { count: 1 } },
       { new: true, upsert: true }
     );
-    return { success: true, data: counter };
+    return { success: true, data: counter.count };
   } catch (error: any) {
     throw { success: false, message: error.message };
   }
@@ -35,4 +35,4 @@ const updateCounter = async (name: any, cafe_id: any, count: any) => {
   }
 };
 
-export { getCounter, createCounter, updateCounter };
+export { getNextSequence, createCounter, updateCounter };

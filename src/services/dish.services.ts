@@ -8,6 +8,12 @@ import {
   getDishById,
 } from "../repository/dish.services";
 import { uploadImage } from "../utils/utils";
+import {
+  createCategory,
+  getCategoryByName,
+} from "../repository/category.repository";
+import { uploadImageToS3 } from "../utils/aws";
+import { getNextSequence } from "../repository/counter.repository";
 
 const createDishService = async (
   dishData: any,
@@ -15,13 +21,13 @@ const createDishService = async (
   userData: any
 ): Promise<CommonResponse> => {
   try {
-    const { name, description, price } = dishData;
+    const { name, price, category } = dishData;
     const { role } = userData;
     let { cafe_id } = dishData;
     if (role !== "superadmin") {
       cafe_id = userData.cafe_id;
     }
-    if (!name || !price || !cafe_id || !file) {
+    if (!name || !price || !cafe_id || !file || !category) {
       return {
         success: false,
         message: messages.INVALID_PARAMETERS,
@@ -36,7 +42,19 @@ const createDishService = async (
         status: statusCodes.BAD_REQUEST,
       };
     }
-    const imageUrl = await uploadImage(file);
+    let categoryData = await getCategoryByName(category);
+    if (!categoryData.data) {
+      categoryData = await createCategory({
+        name: category,
+        cafe_id,
+        userRole: role,
+      });
+    }
+    if (!categoryData.success) {
+      return categoryData;
+    }
+    const imageUrl = await uploadImageToS3(file, name, cafe_id);
+    console.log("imageUrl", imageUrl);
     if (!imageUrl.success) {
       return {
         success: false,
@@ -45,7 +63,12 @@ const createDishService = async (
       };
     }
     dishData.image_url = imageUrl.data;
-    const dish = await createDish(dishData);
+    const dishId = await getNextSequence("dish", cafe_id);
+    const dish = await createDish({
+      ...dishData,
+      cafe_id,
+      dish_id: dishId.data,
+    });
     return {
       success: true,
       message: messages.DISH_CREATED_SUCCESSFULLY,
@@ -53,6 +76,7 @@ const createDishService = async (
       status: statusCodes.CREATED,
     };
   } catch (error: any) {
+    console.log("error", error);
     return {
       success: false,
       message: error.message,
