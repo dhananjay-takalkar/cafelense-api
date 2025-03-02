@@ -6,7 +6,6 @@ const categorySchema = new Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
     },
     description: {
       type: String,
@@ -31,6 +30,8 @@ const categorySchema = new Schema(
     },
   }
 );
+
+categorySchema.index({ name: 1 }, { unique: true });
 
 const Category = mongoose.model<ICategory & Document>(
   "Category",

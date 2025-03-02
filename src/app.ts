@@ -4,6 +4,7 @@ import cors from "cors";
 import dishRoutes from "./routes/dish.routes";
 import cafeRoutes from "./routes/cafe.route";
 import compression from "compression";
+import categoryRoutes from "./routes/category.route";
 
 const app = express();
 
@@ -14,5 +15,6 @@ app.use(compression());
 app.use("/api/auth", authRoutes);
 app.use("/api/dish", dishRoutes);
 app.use("/api/cafe", cafeRoutes);
+app.use("/api/category", categoryRoutes);
 
 export default app;

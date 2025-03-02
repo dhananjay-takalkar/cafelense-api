@@ -34,6 +34,8 @@ const messages: Messages = {
   CATEGORY_FOUND: "Category found",
   FILE_UPLOADED_SUCCESSFULLY: "File uploaded successfully",
   FILE_UPLOAD_FAILED: "File upload failed",
+  CATEGORIES_FOUND: "Categories found",
+  CATEGORIES_NOT_FOUND: "Categories not found",
 };
 
 export default messages;

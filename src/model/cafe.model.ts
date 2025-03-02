@@ -50,6 +50,11 @@ const cafeSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    themeColor_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "ThemeColor",
+    },
   },
   {
     timestamps: {

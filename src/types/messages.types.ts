@@ -32,4 +32,6 @@ export type Messages = {
   CATEGORY_FOUND: string;
   FILE_UPLOADED_SUCCESSFULLY: string;
   FILE_UPLOAD_FAILED: string;
+  CATEGORIES_FOUND: string;
+  CATEGORIES_NOT_FOUND: string;
 };
