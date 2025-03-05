@@ -17,4 +17,8 @@ export const statusCodes = {
   NOT_FOUND: 404,
 };
 
-export default { COUNTER_NAME, statusCodes };
+export const ROLES = {
+  SUPERADMIN: "superadmin",
+  ADMIN: "admin",
+  USER: "user",
+};

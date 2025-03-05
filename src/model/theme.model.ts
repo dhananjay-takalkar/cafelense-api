@@ -9,3 +9,5 @@ const themeSchema = new Schema({
 });
 
 const Theme = mongoose.model<ITheme & Document>("Theme", themeSchema);
+
+export default Theme;

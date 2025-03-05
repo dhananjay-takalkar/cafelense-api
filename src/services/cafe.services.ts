@@ -80,7 +80,7 @@ const addCafeService = async (
     });
     console.log(userInfo);
     await updateUserById(userInfo.userId, {
-      cafe_id: nextCafeId.data.count,
+      cafe_id: nextCafeId.data,
     });
     return {
       status: statusCodes.CREATED,

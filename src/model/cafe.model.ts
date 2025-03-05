@@ -40,13 +40,12 @@ const cafeSchema = new Schema(
     },
     logo_url: {
       type: String,
-      required: true,
     },
-    isActive: {
+    is_active: {
       type: Boolean,
       default: false,
     },
-    isDeleted: {
+    is_deleted: {
       type: Boolean,
       default: false,
     },
