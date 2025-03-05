@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const generateToken = (data: any, expiresIn: any = "1h") => {
+const generateToken = (data: any, expiresIn: any = "1d") => {
   try {
     return jwt.sign(data, (process.env.JWT_SECRET as jwt.Secret) || "test", {
       expiresIn,

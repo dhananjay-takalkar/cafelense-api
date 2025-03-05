@@ -40,7 +40,6 @@ const cafeSchema = new Schema(
     },
     logo_url: {
       type: String,
-      required: true,
     },
     is_active: {
       type: Boolean,
