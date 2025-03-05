@@ -18,7 +18,7 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "waiter", "manager", "user"],
+      enum: ["admin", "waiter", "manager", "user", "superadmin"],
       default: "user",
     },
     cafe_id: {

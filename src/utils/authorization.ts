@@ -1,10 +1,12 @@
+import { ROLES } from "./constants";
+
 const authorization = {
-  createdish: ["admin", "superadmin"],
-  getdishbyid: ["admin", "superadmin"],
-  getdishbycafeid: ["admin", "superadmin"],
-  uploadimage: ["admin", "superadmin"],
-  createcategory: ["admin", "superadmin"],
-  createtheme: ["superadmin"],
+  createdish: [ROLES.ADMIN, ROLES.SUPERADMIN],
+  getdishbyid: [ROLES.ADMIN, ROLES.SUPERADMIN],
+  getdishbycafeid: [ROLES.ADMIN, ROLES.SUPERADMIN],
+  uploadimage: [ROLES.ADMIN, ROLES.SUPERADMIN],
+  createcategory: [ROLES.ADMIN, ROLES.SUPERADMIN],
+  createtheme: [ROLES.SUPERADMIN],
 };
 
 const isAuthorized = (endpoint: keyof typeof authorization, role: string) =>

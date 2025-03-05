@@ -1,6 +1,6 @@
 import { CommonResponse } from "../types/common.type";
 import messages from "../utils/messages";
-import { statusCodes } from "../utils/constants";
+import { ROLES, statusCodes } from "../utils/constants";
 import { getCafeById } from "../repository/cafe.repository";
 import {
   createDish,
@@ -21,7 +21,7 @@ const createDishService = async (
     const { name, price, categoryIds } = dishData;
     const { role } = userData;
     let { cafe_id } = dishData;
-    if (role !== "superadmin") {
+    if (role !== ROLES.SUPERADMIN) {
       cafe_id = userData.cafe_id;
     }
     if (!name || !price || !cafe_id || !file || !categoryIds) {

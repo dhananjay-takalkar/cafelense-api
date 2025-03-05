@@ -1,4 +1,4 @@
-import { statusCodes } from "../utils/constants";
+import { ROLES, statusCodes } from "../utils/constants";
 import {
   createCategory,
   getAllCategories,
@@ -15,7 +15,7 @@ const createCategoryService = async (
   try {
     const { name } = categoryData;
     const { cafe_id, role } = userData;
-    if (!name || (role !== "superadmin" && !cafe_id)) {
+    if (!name || (role !== ROLES.SUPERADMIN && !cafe_id)) {
       return {
         success: false,
         message: messages.INVALID_PARAMETERS,
@@ -48,7 +48,7 @@ const getCategoriesService = async (
       skip?: number;
     } = {};
     const { role } = userData;
-    if (role !== "superadmin") {
+    if (role !== ROLES.SUPERADMIN) {
       match = { cafe_id: userData.cafe_id };
     } else {
       match = { cafe_id };
@@ -108,7 +108,7 @@ const getCategoriesByCafeService = async (
   try {
     let { cafe_id } = query;
     const { role } = userData;
-    if (role !== "superadmin") {
+    if (role !== ROLES.SUPERADMIN) {
       cafe_id = userData.cafe_id;
     }
     const categories = await getCategoriesByCafe(cafe_id);
