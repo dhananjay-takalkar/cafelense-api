@@ -2,17 +2,31 @@ import Category from "../model/category.model";
 import { statusCodes } from "../utils/constants";
 import messages from "../utils/messages";
 
-const createCategory = async (categoryData: any) => {
+const getAllCategories = async (query: any) => {
   try {
-    const { name, userRole, cafe_id } = categoryData;
-    if (!name || (userRole !== "superadmin" && !cafe_id)) {
+    const categories = await Category.find(query.match)
+      .limit(query.limit)
+      .skip(query.skip);
+    if (!categories) {
       return {
         success: false,
-        message: messages.INVALID_PARAMETERS,
-        status: statusCodes.BAD_REQUEST,
+        message: messages.CATEGORIES_NOT_FOUND,
+        status: statusCodes.SUCCESS,
       };
     }
-    delete categoryData.userRole;
+    return {
+      success: true,
+      message: messages.CATEGORIES_FOUND,
+      status: statusCodes.SUCCESS,
+      data: categories,
+    };
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+const createCategory = async (categoryData: any) => {
+  try {
     const category = await Category.create(categoryData);
     if (!category) {
       return {
@@ -74,4 +88,46 @@ const getCategoryByName = async (name: string) => {
   }
 };
 
-export { createCategory, getCategoryById, getCategoryByName };
+const getCategoriesById = async (categoryIds: string[]) => {
+  try {
+    const categories = await Category.find({ _id: { $in: categoryIds } });
+    if (!categories) {
+      return {
+        success: false,
+        message: messages.CATEGORIES_NOT_FOUND,
+        status: statusCodes.SUCCESS,
+      };
+    }
+    return {
+      success: true,
+      message: messages.CATEGORIES_FOUND,
+      status: statusCodes.SUCCESS,
+      data: categories,
+    };
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+const getCategoriesByCafe = async (cafeId: string) => {
+  try {
+    const categories = await Category.find({ cafe_id: cafeId });
+    return {
+      success: true,
+      message: messages.CATEGORIES_FOUND,
+      status: statusCodes.SUCCESS,
+      data: categories,
+    };
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export {
+  createCategory,
+  getCategoryById,
+  getCategoryByName,
+  getCategoriesById,
+  getAllCategories,
+  getCategoriesByCafe,
+};

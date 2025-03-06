@@ -1,12 +1,23 @@
 import mongoose from "mongoose";
 import Cafe from "../model/cafe.model";
 import { ICafe } from "../types/cafe.type";
-
+import { statusCodes } from "../utils/constants";
 const createCafe = async (cafeData: ICafe) => {
   try {
-    console.log(cafeData);
     const cafe = await Cafe.create(cafeData);
-    return { data: cafe, success: true };
+    if (!cafe) {
+      return {
+        status: statusCodes.BAD_REQUEST,
+        message: "Cafe not created",
+        success: false,
+      };
+    }
+    return {
+      status: statusCodes.CREATED,
+      message: "Cafe created successfully",
+      success: true,
+      data: cafe,
+    };
   } catch (error: any) {
     throw { success: false, message: error.message };
   }
@@ -15,7 +26,19 @@ const createCafe = async (cafeData: ICafe) => {
 const getCafeById = async (cafeId: any) => {
   try {
     const cafe = await Cafe.findOne({ id: cafeId });
-    return { data: cafe, success: true };
+    if (!cafe) {
+      return {
+        status: statusCodes.SUCCESS,
+        message: "Cafe not found",
+        success: false,
+      };
+    }
+    return {
+      status: statusCodes.SUCCESS,
+      message: "Cafe found successfully",
+      success: true,
+      data: cafe,
+    };
   } catch (error: any) {
     throw { success: false, message: error.message };
   }
@@ -24,7 +47,19 @@ const getCafeById = async (cafeId: any) => {
 const getCafeByMobileNumber = async (mobileNumber: any) => {
   try {
     const cafe = await Cafe.findOne({ mobile_number: mobileNumber });
-    return { data: cafe, success: true };
+    if (!cafe) {
+      return {
+        status: statusCodes.SUCCESS,
+        message: "Cafe not found",
+        success: false,
+      };
+    }
+    return {
+      status: statusCodes.SUCCESS,
+      message: "Cafe found successfully",
+      success: true,
+      data: cafe,
+    };
   } catch (error: any) {
     throw { success: false, message: error.message };
   }
@@ -76,7 +111,19 @@ const getCafeMenu = async (cafeId: any) => {
         },
       },
     ]);
-    return { data: cafe, success: true };
+    if (!cafe) {
+      return {
+        status: statusCodes.SUCCESS,
+        message: "Cafe not found",
+        success: false,
+      };
+    }
+    return {
+      status: statusCodes.SUCCESS,
+      message: "Cafe found successfully",
+      success: true,
+      data: cafe,
+    };
   } catch (error: any) {
     throw { success: false, message: error.message };
   }

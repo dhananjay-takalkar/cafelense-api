@@ -1,6 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { IUser } from "../types/user.type";
-import bcrypt from "bcrypt";
 
 const userSchema = new Schema(
   {
@@ -19,7 +18,7 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "waiter", "manager", "user"],
+      enum: ["admin", "waiter", "manager", "user", "superadmin"],
       default: "user",
     },
     cafe_id: {

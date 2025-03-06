@@ -1,6 +1,6 @@
 import { CommonResponse } from "../types/common.type";
 import messages from "../utils/messages";
-import { statusCodes } from "../utils/constants";
+import { ROLES, statusCodes } from "../utils/constants";
 import { getCafeById } from "../repository/cafe.repository";
 import {
   createDish,
@@ -8,26 +8,23 @@ import {
   getDishById,
 } from "../repository/dish.services";
 import { uploadImage } from "../utils/utils";
-import {
-  createCategory,
-  getCategoryByName,
-} from "../repository/category.repository";
+import { getCategoriesById } from "../repository/category.repository";
 import { uploadImageToS3 } from "../utils/aws";
 import { getNextSequence } from "../repository/counter.repository";
-
+import { createManyDishCategories } from "../repository/dishCategory.repository";
 const createDishService = async (
   dishData: any,
   file: any,
   userData: any
 ): Promise<CommonResponse> => {
   try {
-    const { name, price, category } = dishData;
+    const { name, price, categoryIds } = dishData;
     const { role } = userData;
     let { cafe_id } = dishData;
-    if (role !== "superadmin") {
+    if (role !== ROLES.SUPERADMIN) {
       cafe_id = userData.cafe_id;
     }
-    if (!name || !price || !cafe_id || !file || !category) {
+    if (!name || !price || !cafe_id || !file || !categoryIds) {
       return {
         success: false,
         message: messages.INVALID_PARAMETERS,
@@ -42,18 +39,15 @@ const createDishService = async (
         status: statusCodes.BAD_REQUEST,
       };
     }
-    let categoryData = await getCategoryByName(category);
+    let categoryData = await getCategoriesById(categoryIds);
     if (!categoryData.data) {
-      categoryData = await createCategory({
-        name: category,
-        cafe_id,
-        userRole: role,
-      });
+      return {
+        success: false,
+        message: messages.CATEGORY_NOT_FOUND,
+        status: statusCodes.BAD_REQUEST,
+      };
     }
-    if (!categoryData.success) {
-      return categoryData;
-    }
-    const imageUrl = await uploadImageToS3(file, name, cafe_id);
+    const imageUrl = await uploadImageToS3(file, `${name}`, `dish/${cafe_id}`);
     console.log("imageUrl", imageUrl);
     if (!imageUrl.success) {
       return {
@@ -69,6 +63,25 @@ const createDishService = async (
       cafe_id,
       dish_id: dishId.data,
     });
+    if (!dish.success) {
+      return {
+        success: false,
+        message: messages.DISH_CREATION_FAILED,
+        status: statusCodes.BAD_REQUEST,
+      };
+    }
+    const dishCategoryData = categoryIds.map((categoryId: string) => ({
+      dish_id: dishId.data,
+      category_id: categoryId,
+    }));
+    const dishCategory = await createManyDishCategories(dishCategoryData);
+    if (!dishCategory.success) {
+      return {
+        success: false,
+        message: "FAILED",
+        status: statusCodes.BAD_REQUEST,
+      };
+    }
     return {
       success: true,
       message: messages.DISH_CREATED_SUCCESSFULLY,

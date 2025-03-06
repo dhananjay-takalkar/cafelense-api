@@ -3,11 +3,11 @@ import { createUser, getUserByEmail } from "../repository/user.repository";
 import { generateToken } from "../utils/token";
 import bcrypt from "bcrypt";
 import { CommonResponse } from "../types/common.type";
-import { statusCodes } from "../utils/constants";
+import { ROLES, statusCodes } from "../utils/constants";
 
 const registerService = async (body: any): Promise<CommonResponse> => {
   try {
-    const { name, email, password, role = "admin" } = body;
+    const { name, email, password, role = ROLES.ADMIN } = body;
     if (!name || !email || !password) {
       return {
         status: statusCodes.BAD_REQUEST,

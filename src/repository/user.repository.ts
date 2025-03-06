@@ -1,4 +1,5 @@
 import User from "../model/user.model";
+import messages from "../utils/messages";
 
 const createUser = async (userData: any) => {
   try {
@@ -26,6 +27,9 @@ const getUserByEmail = async (email: any) => {
 const getUserById = async (id: any) => {
   try {
     const user = await User.findById(id);
+    if (!user) {
+      return { success: false, message: messages.USER_NOT_FOUND };
+    }
     return { data: user, success: true };
   } catch (error: any) {
     throw { success: false, message: error.message };
