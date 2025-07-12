@@ -24,7 +24,7 @@ const userSchema = new Schema(
     cafe_id: {
       type: Number,
       // required: true,
-      ref: "Cafe",
+      // ref: "Cafe",
     },
     is_active: {
       type: Boolean,

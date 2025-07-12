@@ -31,7 +31,7 @@ const registerService = async (body: any): Promise<CommonResponse> => {
       role,
     });
     const token = generateToken({
-      userId: user._id,
+      id: user._id,
       role: user.role,
     });
     return {
@@ -115,7 +115,7 @@ const loginService = async (body: any): Promise<CommonResponse> => {
       };
     }
     const token = generateToken({
-      userId: data._id,
+      id: data._id,
       cafe_id: data.cafe_id,
       role: data.role,
       email: data.email,

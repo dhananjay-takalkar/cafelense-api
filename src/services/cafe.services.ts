@@ -2,6 +2,7 @@ import {
   createCafe,
   getCafeById,
   getCafeByMobileNumber,
+  getCafeByUserId,
 } from "../repository/cafe.repository";
 import { getNextSequence } from "../repository/counter.repository";
 import { COUNTER_NAME, statusCodes } from "../utils/constants";
@@ -18,7 +19,7 @@ const addCafeService = async (
   try {
     const { name, city, state, country, pincode, mobile_number } = body;
     const { email } = userInfo;
-
+    console.log(body);
     if (
       !name ||
       // !city ||
@@ -135,15 +136,17 @@ const getCafeByIdService = async (body: any): Promise<CommonResponse> => {
 
 const getCafeService = async (userInfo: any): Promise<CommonResponse> => {
   try {
-    const { cafe_id } = userInfo;
-    if (!cafe_id) {
+    console.log(userInfo);
+    const { id } = userInfo;
+    if (!id) {
       return {
         status: statusCodes.BAD_REQUEST,
         message: messages.INVALID_PARAMETERS,
         success: false,
       };
     }
-    const cafe = await getCafeById(cafe_id);
+    const cafe = await getCafeByUserId(id);
+    console.log(cafe);
     if (!cafe.data) {
       return {
         status: statusCodes.BAD_REQUEST,

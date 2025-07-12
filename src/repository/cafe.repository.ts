@@ -1,7 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import Cafe from "../model/cafe.model";
 import { ICafe } from "../types/cafe.type";
 import { statusCodes } from "../utils/constants";
+import User from "../model/user.model";
+
 const createCafe = async (cafeData: ICafe) => {
   try {
     const cafe = await Cafe.create(cafeData);
@@ -128,4 +130,58 @@ const getCafeMenu = async (cafeId: any) => {
     throw { success: false, message: error.message };
   }
 };
-export { createCafe, getCafeById, getCafeByMobileNumber, getCafeMenu };
+
+const getCafeByUserId = async (userId: any) => {
+  try {
+    let match = {};
+    if (userId) {
+      match = {
+        _id: new mongoose.Types.ObjectId(userId),
+      };
+    }
+    const cafe = await User.aggregate([
+      {
+        $match: match,
+      },
+      {
+        $lookup: {
+          from: "caves",
+          localField: "cafe_id",
+          foreignField: "id",
+          as: "cafeData",
+        },
+      },
+      {
+        $unwind: "$cafeData",
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          cafe_id: 1,
+          cafeData: {
+            _id: 1,
+            name: 1,
+            mobile_number: 1,
+            email: 1,
+            logo_url: 1,
+            city: 1,
+            state: 1,
+          },
+        },
+      },
+    ]);
+
+    return { data: cafe, success: true };
+  } catch (error: any) {
+    console.log(error);
+    throw { success: false, message: error.message };
+  }
+};
+export {
+  createCafe,
+  getCafeById,
+  getCafeByMobileNumber,
+  getCafeMenu,
+  getCafeByUserId,
+};
